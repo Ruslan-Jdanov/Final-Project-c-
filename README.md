@@ -32,10 +32,15 @@ dotnet run --project .
 ## Build & run
 
 1. Build:
+```
    dotnet build
+```
 
 2. Run:
-   dotnet run --project .        (or run from your IDE)
+```
+   dotnet run --project .
+```
+(or run from your IDE)
 
 3. Where to put `inventory.txt` if you have problem with it:
    - The app looks for `inventory.txt` in the application base directory (where the executable runs).

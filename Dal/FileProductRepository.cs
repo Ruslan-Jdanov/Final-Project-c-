@@ -10,10 +10,13 @@ public class FileProductRepository : IProductRepository
 {
     private readonly string _path;
     private List<Product> _cache = new List<Product>();
+    private readonly IAppLogger? _logger;
 
-    public FileProductRepository(string path)
+    // Backwards-compatible constructor: logger optional
+    public FileProductRepository(string path, IAppLogger? logger = null)
     {
         _path = path;
+        _logger = logger;
         LoadFromFile();
     }
 
@@ -23,7 +26,7 @@ public class FileProductRepository : IProductRepository
         _cache.Clear();
         if (!File.Exists(_path))
         {
-            Console.WriteLine("Data file not found: " + _path);
+            Log($"Data file not found: {_path}", isError: true);
             return;
         }
 
@@ -33,36 +36,51 @@ public class FileProductRepository : IProductRepository
         {
             lineNo++;
             var line = raw.Trim();
-            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue; // allow comments with '#'
-            var parts = line.Split('|');
+            if (string.IsNullOrEmpty(line)) continue;
+
+            // Allow comments starting with '#'
+            if (line.StartsWith("#")) continue;
+
+            var parts = line.Split('|').Select(p => p.Trim()).ToArray();
+
+            // Handle lines that start with a numeric index like "1| CE-001|..."
+            // If first part is numeric and there are at least 7 parts, drop the numeric column
+            if (parts.Length >= 7 && int.TryParse(parts[0], out _))
+            {
+                parts = parts.Skip(1).ToArray();
+            }
+
+            // Also if a line like "1| # Format: ..." (number + comment), skip it
+            if (parts.Length > 0 && parts[0].StartsWith("#")) continue;
+
             if (parts.Length < 6)
             {
-                Console.WriteLine($"Malformed line (line {lineNo}): {line}");
+                Log($"Malformed line (line {lineNo}): {line}", isError: true);
                 continue;
             }
 
             var p = new Product();
-            p.Id = parts[0].Trim();
-            p.Name = parts[1].Trim();
-            p.Category = parts[2].Trim();
+            p.Id = parts[0];
+            p.Name = parts[1];
+            p.Category = parts[2];
 
             // Support both comma and dot decimal separators:
-            var priceStr = parts[3].Trim().Replace(',', '.');
+            var priceStr = parts[3].Replace(',', '.');
             if (!decimal.TryParse(priceStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var price))
             {
-                Console.WriteLine($"Price parse error at line {lineNo}: '{parts[3]}'");
+                Log($"Price parse error at line {lineNo}: '{parts[3]}'", isError: true);
                 continue;
             }
             p.Price = price;
 
-            if (!int.TryParse(parts[4].Trim(), out var qty))
+            if (!int.TryParse(parts[4], out var qty))
             {
-                Console.WriteLine($"Quantity parse error at line {lineNo}: '{parts[4]}'");
+                Log($"Quantity parse error at line {lineNo}: '{parts[4]}'", isError: true);
                 continue;
             }
             p.Quantity = qty;
 
-            p.Description = parts[5].Trim();
+            p.Description = parts[5];
             _cache.Add(p);
         }
     }
@@ -89,9 +107,15 @@ public class FileProductRepository : IProductRepository
 
     public void Add(Product product)
     {
-        // Basic validation: require Id and Name
-        if (string.IsNullOrWhiteSpace(product.Id) || string.IsNullOrWhiteSpace(product.Name))
-            throw new ArgumentException("Product must have Id and Name.");
+        // Central validation (uses ProductValidator)
+        try
+        {
+            ProductValidator.Validate(product);
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException("Product validation failed: " + ex.Message, ex);
+        }
 
         // Ensure unique ID
         var existing = GetById(product.Id);
@@ -125,5 +149,20 @@ public class FileProductRepository : IProductRepository
         }
 
         File.WriteAllLines(_path, lines, Encoding.UTF8);
+        Log($"Saved {_cache.Count} products to {_path}", isError: false);
+    }
+
+    private void Log(string message, bool isError)
+    {
+        if (_logger != null)
+        {
+            if (isError) _logger.LogError(message); else _logger.LogInfo(message);
+        }
+        else
+        {
+            // Backwards-compatible fallback
+            if (isError) Console.WriteLine("ERROR: " + message);
+            else Console.WriteLine(message);
+        }
     }
 }

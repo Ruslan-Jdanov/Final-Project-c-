@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.IO;
 
 class Program
@@ -24,7 +24,11 @@ class Program
         }
 
         Console.WriteLine($"Loading data from: {dataFile}");
-        var repository = new FileProductRepository(dataFile);
+
+        // Simple console logger (no external packages required)
+        var logger = new ConsoleAppLogger();
+
+        var repository = new FileProductRepository(dataFile, logger);
         var service = new ProductService(repository);
         var menu = new Menu(service);
 

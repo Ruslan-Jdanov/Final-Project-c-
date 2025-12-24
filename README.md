@@ -1,44 +1,46 @@
-# Computer Equipment Warehouse (Course Project)
+# Computer Equipment Warehouse (Warehouse Search System)
 
-Console app to search products from an inventory file.  
-This repository contains a simple multilayer C# console application (Entities, Repositories, Services, UI).
+Console application to search products in a warehouse inventory.
 
-## Requirements
-- .NET 7.0 SDK (or compatible .NET SDK installed)
+## Requirements implemented
+- Multilayer architecture: Domain, Dal, Services, UI
+- Reads inventory from `inventory.txt`
+- Search by name, id, category, price range
+- List with sorting
+- Add / Save / Reload commands
+- report.md included
 
-## Build and run
+## Build & run
+
 1. Build:
    dotnet build
 
 2. Run:
-   dotnet run
+   dotnet run --project ./  (or run from your IDE)
 
-(If project root is different or dotnet run fails, run: dotnet run --project ./zxc.csproj)
+3. Where to put `inventory.txt`:
+   - The app looks for `inventory.txt` in the application base directory (where the executable runs).
+   - If not found there, it will try the current working directory.
+   - For development, place `inventory.txt` in the repository root (so `dotnet run` finds it), or next to the built executable.
 
-## Commands (available in the app)
-- help                          - Show help
-- list [order] [asc|desc]       - Show all products. order: name|price|category|id (default: name asc)
-  Example: list price desc
-- search name <text>            - Search by name (partial, case-insensitive)
-- search id <ID>                - Search by exact ID
-- search category <category>    - Search by category
-- search price <min> <max>      - Search by price range (e.g. search price 10 200)
-- show <ID>                     - Show full product details by ID
-- add                           - Add a new product (interactive)
-- save                          - Save current products to inventory.txt
-- reload                        - Reload data from file
-- exit                          - Exit
-
-## Inventory file format
-Each non-comment line must be:
-ID|Name|Category|Price|Quantity|Description
-
-Lines starting with `#` are ignored.
-
-Example:
-CE-001|Gaming Laptop X15|Laptop|1499.99|10|High-performance gaming laptop with RTX.
+## Commands (in app)
+- help — show commands
+- list [order] [asc|desc] — list all products. order: name|price|category|id (default: name asc)
+  Example: `list price desc`
+- search name <text> — partial, case-insensitive
+- search id <ID> — exact ID
+- search category <category>
+- search price <min> <max>
+- show <ID> — print full details
+- add — interactive add (use `save` to persist)
+- save — write current products to `inventory.txt`
+- reload — reload data from file
+- exit — exit
 
 ## Tests
-A test project using xUnit is provided in `zxc.Tests`. To run tests:
+A test project (xUnit) is included under `Tests/`. To run tests:
+```
+dotnet test ./Tests
+```
 
-dotnet test
+If you have a different target framework, update the Tests project `<TargetFramework>` accordingly.

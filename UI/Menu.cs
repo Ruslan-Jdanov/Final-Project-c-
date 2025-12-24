@@ -49,6 +49,13 @@ public class Menu
                         _service.ReloadData();
                         Console.WriteLine("Данные перезагружены.");
                         break;
+                    case "add":
+                        HandleAdd();
+                        break;
+                    case "save":
+                        _service.SaveChanges();
+                        Console.WriteLine("Данные записаны в файл.");
+                        break;
                     default:
                         Console.WriteLine("Неизвестная команда. Введите 'help'.");
                         break;
@@ -72,6 +79,8 @@ public class Menu
         Console.WriteLine("  search category <категория>   - Поиск по категории");
         Console.WriteLine("  search price <min> <max>      - Поиск по диапазону цен (например: search price 10 200)");
         Console.WriteLine("  show <ID>                     - Показать полные данные товара по ID");
+        Console.WriteLine("  add                           - Добавить новый товар (интерактивно)");
+        Console.WriteLine("  save                          - Сохранить все текущие товары в файл inventory.txt");
         Console.WriteLine("  reload                        - Перезагрузить данные из файла");
         Console.WriteLine("  exit                          - Выйти");
     }
@@ -120,8 +129,8 @@ public class Menu
                     Console.WriteLine("Неверные параметры. Пример: search price 10 200");
                     return;
                 }
-                if (!decimal.TryParse(parts[2], NumberStyles.Any, CultureInfo.InvariantCulture, out var min) ||
-                    !decimal.TryParse(parts[3], NumberStyles.Any, CultureInfo.InvariantCulture, out var max))
+                if (!decimal.TryParse(parts[2].Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out var min) ||
+                    !decimal.TryParse(parts[3].Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out var max))
                 {
                     Console.WriteLine("Невозможно распознать числа. Используйте формат: 10 200");
                     return;
@@ -142,6 +151,72 @@ public class Menu
         var p = _service.GetById(id);
         if (p == null) Console.WriteLine("Товар не найден");
         else Console.WriteLine(p);
+    }
+
+    private void HandleAdd()
+    {
+        Console.WriteLine("Добавление нового товара. Оставьте поле пустым для отмены.");
+
+        // ID
+        Console.Write("ID: ");
+        var id = Console.ReadLine()?.Trim();
+        if (string.IsNullOrWhiteSpace(id)) { Console.WriteLine("Отменено."); return; }
+
+        // Name
+        Console.Write("Name: ");
+        var name = Console.ReadLine()?.Trim();
+        if (string.IsNullOrWhiteSpace(name)) { Console.WriteLine("Отменено."); return; }
+
+        // Category
+        Console.Write("Category: ");
+        var category = Console.ReadLine()?.Trim();
+        if (string.IsNullOrWhiteSpace(category)) category = "";
+
+        // Price
+        decimal price = 0m;
+        while (true)
+        {
+            Console.Write("Price (например 199.99 или 199,99): ");
+            var priceStr = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(priceStr)) { Console.WriteLine("Отменено."); return; }
+            if (decimal.TryParse(priceStr.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out price)) break;
+            Console.WriteLine("Неверный формат цены. Попробуйте ещё.");
+        }
+
+        // Quantity
+        int qty = 0;
+        while (true)
+        {
+            Console.Write("Quantity (целое число): ");
+            var qStr = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(qStr)) { Console.WriteLine("Отменено."); return; }
+            if (int.TryParse(qStr, out qty)) break;
+            Console.WriteLine("Неверный формат количества. Попробуйте ещё.");
+        }
+
+        // Description
+        Console.Write("Description: ");
+        var desc = Console.ReadLine() ?? "";
+
+        var product = new Product
+        {
+            Id = id,
+            Name = name,
+            Category = category,
+            Price = price,
+            Quantity = qty,
+            Description = desc
+        };
+
+        try
+        {
+            _service.AddProduct(product);
+            Console.WriteLine("Товар добавлен в память. Введите 'save' чтобы записать в файл.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Не удалось добавить товар: " + ex.Message);
+        }
     }
 
     private void PrintProducts(System.Collections.Generic.IEnumerable<Product> items)

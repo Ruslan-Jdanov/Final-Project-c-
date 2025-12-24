@@ -54,4 +54,7 @@ public class ProductService
     public IEnumerable<Product> Find(Func<Product, bool> predicate) => _repo.FindByPredicate(predicate);
 
     public void ReloadData() => _repo.Reload();
+
+    public void AddProduct(Product p) => _repo.Add(p);
+    public void SaveChanges() => _repo.Save();
 }

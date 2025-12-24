@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Globalization;
+using System.Text;
 
 // ID|Name|Category|Price|Quantity|Description
 public class FileProductRepository : IProductRepository
@@ -43,7 +45,8 @@ public class FileProductRepository : IProductRepository
             p.Name = parts[1].Trim();
             p.Category = parts[2].Trim();
 
-            if (!decimal.TryParse(parts[3].Trim(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var price))
+            var priceStr = parts[3].Trim().Replace(',', '.');
+            if (!decimal.TryParse(priceStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var price))
             {
                 Console.WriteLine($"Ошибка разбора цены в строке {lineNo}: '{parts[3]}'");
                 continue;
@@ -80,5 +83,40 @@ public class FileProductRepository : IProductRepository
     public void Reload()
     {
         LoadFromFile();
+    }
+
+    public void Add(Product product)
+    {
+        if (string.IsNullOrWhiteSpace(product.Id) || string.IsNullOrWhiteSpace(product.Name))
+            throw new ArgumentException("Product must have Id and Name.");
+
+        var existing = GetById(product.Id);
+        if (existing != null)
+            throw new InvalidOperationException($"Товар с ID '{product.Id}' уже существует.");
+
+        _cache.Add(product);
+    }
+
+    public void Save()
+    {
+        var dir = Path.GetDirectoryName(_path);
+        if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        var lines = new List<string>();
+        foreach (var p in _cache)
+        {
+            string id = (p.Id ?? "").Replace("|", " ").Trim();
+            string name = (p.Name ?? "").Replace("|", " ").Trim();
+            string cat = (p.Category ?? "").Replace("|", " ").Trim();
+            string desc = (p.Description ?? "").Replace("|", " ").Trim();
+
+            string price = p.Price.ToString(CultureInfo.InvariantCulture);
+            string qty = p.Quantity.ToString();
+
+            lines.Add($"{id}|{name}|{cat}|{price}|{qty}|{desc}");
+        }
+
+        File.WriteAllLines(_path, lines, Encoding.UTF8);
     }
 }

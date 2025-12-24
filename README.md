@@ -24,5 +24,7 @@ Commands in the application:
 - search category <category>
 - search price <min> <max>
 - show <ID>
+- add — add a new product (interactively); after adding, the product is saved in memory; to save it to a file, use the `save` command
+- save — save all current products to the inventory.txt file
 - reload — reload data from file
 - exit — exit, ig

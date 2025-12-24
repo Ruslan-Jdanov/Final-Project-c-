@@ -30,6 +30,7 @@ dotnet run --project .
 ```
 
 ## Build & run
+If you already have .NET 9
 
 1. Build:
 ```

@@ -12,7 +12,7 @@ public class Menu
 
     public void ShowWelcome()
     {
-        Console.WriteLine("Введите 'help' для списка команд.");
+        Console.WriteLine("Type 'help' to see available commands.");
     }
 
     public void Run()
@@ -34,7 +34,7 @@ public class Menu
                         PrintHelp();
                         break;
                     case "exit":
-                        Console.WriteLine("Выход. До встречи!");
+                        Console.WriteLine("Goodbye!");
                         return;
                     case "list":
                         HandleList(parts);
@@ -47,42 +47,42 @@ public class Menu
                         break;
                     case "reload":
                         _service.ReloadData();
-                        Console.WriteLine("Данные перезагружены.");
+                        Console.WriteLine("Data reloaded.");
                         break;
                     case "add":
                         HandleAdd();
                         break;
                     case "save":
                         _service.SaveChanges();
-                        Console.WriteLine("Данные записаны в файл.");
+                        Console.WriteLine("Data saved to file.");
                         break;
                     default:
-                        Console.WriteLine("Неизвестная команда. Введите 'help'.");
+                        Console.WriteLine("Unknown command. Type 'help'.");
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ошибка: " + ex.Message);
+                Console.WriteLine("Error: " + ex.Message);
             }
         }
     }
 
     private void PrintHelp()
     {
-        Console.WriteLine("Команды:");
-        Console.WriteLine("  help                          - Показать помощь");
-        Console.WriteLine("  list [order] [asc|desc]       - Показать все товары. order: name|price|category|id (по умолчанию name asc)");
-        Console.WriteLine("     Пример: list price desc");
-        Console.WriteLine("  search name <текст>           - Поиск по имени (частичное совпадение)");
-        Console.WriteLine("  search id <ID>                - Поиск по ID (точное совпадение)");
-        Console.WriteLine("  search category <категория>   - Поиск по категории");
-        Console.WriteLine("  search price <min> <max>      - Поиск по диапазону цен (например: search price 10 200)");
-        Console.WriteLine("  show <ID>                     - Показать полные данные товара по ID");
-        Console.WriteLine("  add                           - Добавить новый товар (интерактивно)");
-        Console.WriteLine("  save                          - Сохранить все текущие товары в файл inventory.txt");
-        Console.WriteLine("  reload                        - Перезагрузить данные из файла");
-        Console.WriteLine("  exit                          - Выйти");
+        Console.WriteLine("Commands:");
+        Console.WriteLine("  help                          - Show this help");
+        Console.WriteLine("  list [order] [asc|desc]       - Show all products. order: name|price|category|id (default: name asc)");
+        Console.WriteLine("     Example: list price desc");
+        Console.WriteLine("  search name <text>            - Search by name (partial, case-insensitive)");
+        Console.WriteLine("  search id <ID>                - Search by exact ID");
+        Console.WriteLine("  search category <category>    - Search by category");
+        Console.WriteLine("  search price <min> <max>      - Search by price range (e.g. search price 10 200)");
+        Console.WriteLine("  show <ID>                     - Show full product details by ID");
+        Console.WriteLine("  add                           - Add a new product (interactive)");
+        Console.WriteLine("  save                          - Save current products to inventory.txt");
+        Console.WriteLine("  reload                        - Reload data from file");
+        Console.WriteLine("  exit                          - Exit");
     }
 
     private void HandleList(string[] parts)
@@ -100,7 +100,7 @@ public class Menu
     {
         if (parts.Length < 3)
         {
-            Console.WriteLine("Недостаточно параметров для search. Введите 'help'.");
+            Console.WriteLine("Not enough parameters for search. Type 'help'.");
             return;
         }
 
@@ -115,7 +115,7 @@ public class Menu
             case "id":
                 var id = parts[2];
                 var p = _service.GetById(id);
-                if (p == null) Console.WriteLine("Товар не найден");
+                if (p == null) Console.WriteLine("Product not found");
                 else Console.WriteLine(p);
                 break;
             case "category":
@@ -126,20 +126,20 @@ public class Menu
             case "price":
                 if (parts.Length < 4)
                 {
-                    Console.WriteLine("Неверные параметры. Пример: search price 10 200");
+                    Console.WriteLine("Invalid parameters. Example: search price 10 200");
                     return;
                 }
                 if (!decimal.TryParse(parts[2].Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out var min) ||
                     !decimal.TryParse(parts[3].Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out var max))
                 {
-                    Console.WriteLine("Невозможно распознать числа. Используйте формат: 10 200");
+                    Console.WriteLine("Cannot parse numbers. Use format: 10 200");
                     return;
                 }
                 var byprice = _service.SearchByPriceRange(min, max);
                 PrintProducts(byprice);
                 break;
             default:
-                Console.WriteLine("Неизвестный критерий поиска. Введите 'help'.");
+                Console.WriteLine("Unknown search criterion. Type 'help'.");
                 break;
         }
     }
@@ -149,23 +149,23 @@ public class Menu
         if (parts.Length < 2) { Console.WriteLine("usage: show <ID>"); return; }
         var id = parts[1];
         var p = _service.GetById(id);
-        if (p == null) Console.WriteLine("Товар не найден");
+        if (p == null) Console.WriteLine("Product not found");
         else Console.WriteLine(p);
     }
 
     private void HandleAdd()
     {
-        Console.WriteLine("Добавление нового товара. Оставьте поле пустым для отмены.");
+        Console.WriteLine("Add new product. Leave an input empty to cancel.");
 
         // ID
         Console.Write("ID: ");
         var id = Console.ReadLine()?.Trim();
-        if (string.IsNullOrWhiteSpace(id)) { Console.WriteLine("Отменено."); return; }
+        if (string.IsNullOrWhiteSpace(id)) { Console.WriteLine("Cancelled."); return; }
 
         // Name
         Console.Write("Name: ");
         var name = Console.ReadLine()?.Trim();
-        if (string.IsNullOrWhiteSpace(name)) { Console.WriteLine("Отменено."); return; }
+        if (string.IsNullOrWhiteSpace(name)) { Console.WriteLine("Cancelled."); return; }
 
         // Category
         Console.Write("Category: ");
@@ -176,22 +176,22 @@ public class Menu
         decimal price = 0m;
         while (true)
         {
-            Console.Write("Price (например 199.99 или 199,99): ");
+            Console.Write("Price (e.g. 199.99 or 199,99): ");
             var priceStr = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(priceStr)) { Console.WriteLine("Отменено."); return; }
+            if (string.IsNullOrWhiteSpace(priceStr)) { Console.WriteLine("Cancelled."); return; }
             if (decimal.TryParse(priceStr.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out price)) break;
-            Console.WriteLine("Неверный формат цены. Попробуйте ещё.");
+            Console.WriteLine("Invalid price format. Try again.");
         }
 
         // Quantity
         int qty = 0;
         while (true)
         {
-            Console.Write("Quantity (целое число): ");
+            Console.Write("Quantity (integer): ");
             var qStr = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(qStr)) { Console.WriteLine("Отменено."); return; }
+            if (string.IsNullOrWhiteSpace(qStr)) { Console.WriteLine("Cancelled."); return; }
             if (int.TryParse(qStr, out qty)) break;
-            Console.WriteLine("Неверный формат количества. Попробуйте ещё.");
+            Console.WriteLine("Invalid quantity. Try again.");
         }
 
         // Description
@@ -211,11 +211,11 @@ public class Menu
         try
         {
             _service.AddProduct(product);
-            Console.WriteLine("Товар добавлен в память. Введите 'save' чтобы записать в файл.");
+            Console.WriteLine("Product added to memory. Use 'save' to write to file.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Не удалось добавить товар: " + ex.Message);
+            Console.WriteLine("Failed to add product: " + ex.Message);
         }
     }
 
@@ -224,17 +224,17 @@ public class Menu
         var list = new System.Collections.Generic.List<Product>(items);
         if (list.Count == 0)
         {
-            Console.WriteLine("Ничего не найдено.");
+            Console.WriteLine("No results.");
             return;
         }
-        Console.WriteLine($"Найдено: {list.Count}");
+        Console.WriteLine($"Found: {list.Count}");
         foreach (var p in list)
         {
             Console.WriteLine(p.ToString());
         }
     }
 
-    // Простейший разбор аргументов — сохраняем группы в кавычках как один аргумент
+    // Split arguments (supports quoted groups)
     private string[] SplitArgs(string input)
     {
         var args = new System.Collections.Generic.List<string>();

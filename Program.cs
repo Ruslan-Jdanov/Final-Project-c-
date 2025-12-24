@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 
 class Program
@@ -12,8 +12,8 @@ class Program
     static void Main(string[] args)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.WriteLine($"{APP_NAME} — версия {VERSION} (создано {CREATION_DATE})");
-        Console.WriteLine($"Разработчик: {DEVELOPER_NAME} <{DEVELOPER_EMAIL}>");
+        Console.WriteLine($"{APP_NAME} — version {VERSION} (created {CREATION_DATE})");
+        Console.WriteLine($"Developer: {DEVELOPER_NAME} <{DEVELOPER_EMAIL}>");
         Console.WriteLine();
 
         var dataFile = Path.Combine(AppContext.BaseDirectory, "inventory.txt");
@@ -23,7 +23,7 @@ class Program
             if (File.Exists(alt)) dataFile = alt;
         }
 
-        Console.WriteLine($"Загружаем данные из: {dataFile}");
+        Console.WriteLine($"Loading data from: {dataFile}");
         var repository = new FileProductRepository(dataFile);
         var service = new ProductService(repository);
         var menu = new Menu(service);

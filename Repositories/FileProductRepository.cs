@@ -5,8 +5,7 @@ using System.Linq;
 using System.Globalization;
 using System.Text;
 
-// Формат строки в файле inventory.txt:
-// ID|Name|Category|Price|Quantity|Description
+// File format: ID|Name|Category|Price|Quantity|Description
 public class FileProductRepository : IProductRepository
 {
     private readonly string _path;
@@ -18,12 +17,13 @@ public class FileProductRepository : IProductRepository
         LoadFromFile();
     }
 
+    // Load file lines into _cache
     private void LoadFromFile()
     {
         _cache.Clear();
         if (!File.Exists(_path))
         {
-            Console.WriteLine("Файл данных не найден: " + _path);
+            Console.WriteLine("Data file not found: " + _path);
             return;
         }
 
@@ -33,11 +33,11 @@ public class FileProductRepository : IProductRepository
         {
             lineNo++;
             var line = raw.Trim();
-            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue; // комментарии начинаются с #
+            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue; // allow comments with '#'
             var parts = line.Split('|');
             if (parts.Length < 6)
             {
-                Console.WriteLine($"Неправильная строка (line {lineNo}): {line}");
+                Console.WriteLine($"Malformed line (line {lineNo}): {line}");
                 continue;
             }
 
@@ -46,18 +46,18 @@ public class FileProductRepository : IProductRepository
             p.Name = parts[1].Trim();
             p.Category = parts[2].Trim();
 
-            // Поддержка запятой и точки: заменяем запятую на точку и парсим с InvariantCulture
+            // Support both comma and dot decimal separators:
             var priceStr = parts[3].Trim().Replace(',', '.');
             if (!decimal.TryParse(priceStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var price))
             {
-                Console.WriteLine($"Ошибка разбора цены в строке {lineNo}: '{parts[3]}'");
+                Console.WriteLine($"Price parse error at line {lineNo}: '{parts[3]}'");
                 continue;
             }
             p.Price = price;
 
             if (!int.TryParse(parts[4].Trim(), out var qty))
             {
-                Console.WriteLine($"Ошибка разбора количества в строке {lineNo}: '{parts[4]}'");
+                Console.WriteLine($"Quantity parse error at line {lineNo}: '{parts[4]}'");
                 continue;
             }
             p.Quantity = qty;
@@ -89,21 +89,21 @@ public class FileProductRepository : IProductRepository
 
     public void Add(Product product)
     {
-        // Простая валидация: не добавлять без Id или Name
+        // Basic validation: require Id and Name
         if (string.IsNullOrWhiteSpace(product.Id) || string.IsNullOrWhiteSpace(product.Name))
             throw new ArgumentException("Product must have Id and Name.");
 
-        // Убедимся, что ID уникален (если нужен другой подход — можно перезаписать)
+        // Ensure unique ID
         var existing = GetById(product.Id);
         if (existing != null)
-            throw new InvalidOperationException($"Товар с ID '{product.Id}' уже существует.");
+            throw new InvalidOperationException($"A product with ID '{product.Id}' already exists.");
 
         _cache.Add(product);
     }
 
     public void Save()
     {
-        // Создаём директорию, если нужно
+        // Ensure directory exists
         var dir = Path.GetDirectoryName(_path);
         if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
             Directory.CreateDirectory(dir);
@@ -111,13 +111,13 @@ public class FileProductRepository : IProductRepository
         var lines = new List<string>();
         foreach (var p in _cache)
         {
-            // Санитизация: убираем '|' из полей, чтобы не ломать формат
+            // Sanitize fields so '|' will not break the format
             string id = (p.Id ?? "").Replace("|", " ").Trim();
             string name = (p.Name ?? "").Replace("|", " ").Trim();
             string cat = (p.Category ?? "").Replace("|", " ").Trim();
             string desc = (p.Description ?? "").Replace("|", " ").Trim();
 
-            // Цена в InvariantCulture (десятичная точка)
+            // Price in invariant culture (use '.' as decimal separator)
             string price = p.Price.ToString(CultureInfo.InvariantCulture);
             string qty = p.Quantity.ToString();
 

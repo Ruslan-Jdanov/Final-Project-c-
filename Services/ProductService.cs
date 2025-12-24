@@ -55,7 +55,7 @@ public class ProductService
 
     public void ReloadData() => _repo.Reload();
 
-    // Новые методы для добавления и сохранения
+    // Add and Save methods
     public void AddProduct(Product p) => _repo.Add(p);
     public void SaveChanges() => _repo.Save();
 }

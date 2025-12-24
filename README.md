@@ -1,36 +1,28 @@
 # Computer Equipment Warehouse (консольное приложение)
 
-Кратко: небольшая консольная программа для поиска товаров на складе компьютерной техники на основе текстового файла inventory.txt.
+Briefly: a small console program for searching for items in a computer equipment warehouse based on the text file inventory.txt.
 
-Требования:
-- .NET 6 или выше
+Requirements:
+- .NET 6 or higher
 
-Запуск:
-1. Скопируй все файлы проекта в папку.
-2. Открой терминал в папке проекта.
-3. Выполни:
+Launch:
+1. Copy all project files to the folder.
+2. Open a terminal in the project folder.
+3. Execute:
    - dotnet new console --force
    - dotnet run
 
-Файл данных:
-- inventory.txt (формат строк: ID|Name|Category|Price|Quantity|Description)
-- Комментарии в файле начинаются с `#`.
+Data file:
+- inventory.txt (string format: ID|Name|Category|Price|Quantity|Description)
+- Comments in the file begin with `#`.
 
-Команды в приложении:
-- help — показать команды
-- list [order] [asc|desc] — показать список товаров (order: name|price|category|id)
-- search name <текст>
+Commands in the application:
+- help — show commands
+- list [order] [asc|desc] — show list of products (order: name|price|category|id)
+- search name <text>
 - search id <ID>
-- search category <категория>
+- search category <category>
 - search price <min> <max>
 - show <ID>
-- reload — перезагрузить данные из файла
-- exit — выйти
-
-Как изменить имя приложения / разработчика:
-- В файле Program.cs заменить константы APP_NAME, VERSION, CREATION_DATE, DEVELOPER_NAME, DEVELOPER_EMAIL.
-
-Если хочешь — могу:
-- добавить команды для добавления/редактирования товаров с сохранением в файл,
-- поменять формат на JSON,
-- подготовить презентацию (слайды) и краткую речь для защиты.
+- reload — reload data from file
+- exit — exit, ig

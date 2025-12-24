@@ -3,12 +3,11 @@ using System.IO;
 
 class Program
 {
-    // Настройте эти данные под себя (имя приложения, версия, дата создания, разработчик)
     const string APP_NAME = "Computer Equipment Warehouse";
     const string VERSION = "1.0";
     const string CREATION_DATE = "2025-12-24";
-    const string DEVELOPER_NAME = "rusyajdanowww-cmyk";
-    const string DEVELOPER_EMAIL = "rusyajdanowww-cmyk@example.com";
+    const string DEVELOPER_NAME = "Ruslan Jdanov";
+    const string DEVELOPER_EMAIL = "Ruslan_Jdanov@student.itpu.uz";
 
     static void Main(string[] args)
     {
@@ -17,11 +16,9 @@ class Program
         Console.WriteLine($"Разработчик: {DEVELOPER_NAME} <{DEVELOPER_EMAIL}>");
         Console.WriteLine();
 
-        // Путь к файлу inventory.txt — ищем рядом с папкой приложения
         var dataFile = Path.Combine(AppContext.BaseDirectory, "inventory.txt");
         if (!File.Exists(dataFile))
         {
-            // Также допускаем, что пользователь запустил из исходников — проверим в рабочей директории
             var alt = Path.Combine(Directory.GetCurrentDirectory(), "inventory.txt");
             if (File.Exists(alt)) dataFile = alt;
         }

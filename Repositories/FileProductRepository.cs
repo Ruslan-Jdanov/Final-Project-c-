@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-// Формат строки в файле inventory.txt:
 // ID|Name|Category|Price|Quantity|Description
 public class FileProductRepository : IProductRepository
 {
@@ -31,7 +30,7 @@ public class FileProductRepository : IProductRepository
         {
             lineNo++;
             var line = raw.Trim();
-            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue; // комментарии начинаются с #
+            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
             var parts = line.Split('|');
             if (parts.Length < 6)
             {

@@ -1,4 +1,3 @@
-```markdown
 # Computer Equipment Warehouse (Course Project)
 
 Console app to search products from an inventory file.  

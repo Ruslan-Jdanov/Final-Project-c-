@@ -1,0 +1,15 @@
+C:\Users\USER\Downloads\zxc\bin\Debug\net9.0\zxc.exe
+C:\Users\USER\Downloads\zxc\bin\Debug\net9.0\zxc.deps.json
+C:\Users\USER\Downloads\zxc\bin\Debug\net9.0\zxc.runtimeconfig.json
+C:\Users\USER\Downloads\zxc\bin\Debug\net9.0\zxc.dll
+C:\Users\USER\Downloads\zxc\bin\Debug\net9.0\zxc.pdb
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.AssemblyInfoInputs.cache
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.AssemblyInfo.cs
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.csproj.CoreCompileInputs.cache
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.sourcelink.json
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.dll
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\refint\zxc.dll
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.pdb
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\zxc.genruntimeconfig.cache
+C:\Users\USER\Downloads\zxc\obj\Debug\net9.0\ref\zxc.dll

@@ -1,0 +1,11 @@
+# Формат: ID|Name|Category|Price|Quantity|Description
+CE-001|Gaming Laptop X15|Laptop|1499.99|10|High-performance gaming laptop with RTX.
+CE-002|Office Laptop A14|Laptop|599.00|25|Lightweight laptop for office tasks.
+CE-003|Mechanical Keyboard MK-1|Accessory|79.50|100|RGB mechanical keyboard.
+CE-004|Wireless Mouse WM-200|Accessory|29.99|200|Ergonomic wireless mouse.
+CE-005|27-inch Monitor Pro|Monitor|249.95|30|IPS monitor 2560x1440.
+CE-006|16GB DDR4 RAM Module|Memory|89.00|150|Single 16GB stick, 3200MHz.
+CE-007|500GB SSD NVMe|Storage|69.99|80|Fast NVMe SSD.
+CE-008|Power Supply 650W|PSU|89.99|40|80+ Bronze certified.
+CE-009|Graphics Card GTX-1660|GPU|199.99|15|Reasonable performance for 1080p.
+CE-010|USB-C Hub 7-in-1|Accessory|39.50|60|Hub with HDMI, USB-A, Ethernet.

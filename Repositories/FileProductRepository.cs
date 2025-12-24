@@ -5,6 +5,7 @@ using System.Linq;
 using System.Globalization;
 using System.Text;
 
+// Формат строки в файле inventory.txt:
 // ID|Name|Category|Price|Quantity|Description
 public class FileProductRepository : IProductRepository
 {
@@ -32,7 +33,7 @@ public class FileProductRepository : IProductRepository
         {
             lineNo++;
             var line = raw.Trim();
-            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue;
+            if (string.IsNullOrEmpty(line) || line.StartsWith("#")) continue; // комментарии начинаются с #
             var parts = line.Split('|');
             if (parts.Length < 6)
             {
@@ -45,6 +46,7 @@ public class FileProductRepository : IProductRepository
             p.Name = parts[1].Trim();
             p.Category = parts[2].Trim();
 
+            // Поддержка запятой и точки: заменяем запятую на точку и парсим с InvariantCulture
             var priceStr = parts[3].Trim().Replace(',', '.');
             if (!decimal.TryParse(priceStr, NumberStyles.Any, CultureInfo.InvariantCulture, out var price))
             {
@@ -87,9 +89,11 @@ public class FileProductRepository : IProductRepository
 
     public void Add(Product product)
     {
+        // Простая валидация: не добавлять без Id или Name
         if (string.IsNullOrWhiteSpace(product.Id) || string.IsNullOrWhiteSpace(product.Name))
             throw new ArgumentException("Product must have Id and Name.");
 
+        // Убедимся, что ID уникален (если нужен другой подход — можно перезаписать)
         var existing = GetById(product.Id);
         if (existing != null)
             throw new InvalidOperationException($"Товар с ID '{product.Id}' уже существует.");
@@ -99,6 +103,7 @@ public class FileProductRepository : IProductRepository
 
     public void Save()
     {
+        // Создаём директорию, если нужно
         var dir = Path.GetDirectoryName(_path);
         if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
             Directory.CreateDirectory(dir);
@@ -106,11 +111,13 @@ public class FileProductRepository : IProductRepository
         var lines = new List<string>();
         foreach (var p in _cache)
         {
+            // Санитизация: убираем '|' из полей, чтобы не ломать формат
             string id = (p.Id ?? "").Replace("|", " ").Trim();
             string name = (p.Name ?? "").Replace("|", " ").Trim();
             string cat = (p.Category ?? "").Replace("|", " ").Trim();
             string desc = (p.Description ?? "").Replace("|", " ").Trim();
 
+            // Цена в InvariantCulture (десятичная точка)
             string price = p.Price.ToString(CultureInfo.InvariantCulture);
             string qty = p.Quantity.ToString();
 

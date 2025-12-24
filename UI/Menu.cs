@@ -234,6 +234,7 @@ public class Menu
         }
     }
 
+    // Простейший разбор аргументов — сохраняем группы в кавычках как один аргумент
     private string[] SplitArgs(string input)
     {
         var args = new System.Collections.Generic.List<string>();

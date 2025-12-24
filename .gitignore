@@ -1,6 +1,25 @@
-node_modules/
-.env
-dist/
-build/
+# Build / user files
+bin/
+obj/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS / Rider / IDE
+.vs/
 .vscode/
-*.log
+.idea/
+
+# NuGet
+*.nupkg
+.packages/
+
+# Test results
+TestResults/
+
+# OS files
+.DS_Store
+Thumbs.db

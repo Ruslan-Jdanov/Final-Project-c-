@@ -10,15 +10,34 @@ Console application to search products in a warehouse inventory.
 - Add / Save / Reload commands
 - report.md included
 
+## Environment Requirements
+
+This project targets .NET 9 (net9.0). Before building, make sure you have .NET SDK 9.x installed.
+
+Check the installed SDK version:
+```bash
+dotnet --list-sdks
+```
+If the output does not contain the string `9.x`, install the .NET 9 SDK:
+- Windows / macOS / Linux: Download and install from the official [.NET downloads](https://dotnet.microsoft.com/en-us/download/dotnet/9.0).
+
+After installation, check `dotnet --list-sdks` again. Then run the usual sequence:
+```bash
+dotnet restore
+dotnet build
+dotnet test ./Tests/FinalProject.Tests.csproj
+dotnet run --project .
+```
+
 ## Build & run
 
 1. Build:
    dotnet build
 
 2. Run:
-   dotnet run --project ./  (or run from your IDE)
+   dotnet run --project .        (or run from your IDE)
 
-3. Where to put `inventory.txt`:
+3. Where to put `inventory.txt` if you have problem with it:
    - The app looks for `inventory.txt` in the application base directory (where the executable runs).
    - If not found there, it will try the current working directory.
    - For development, place `inventory.txt` in the repository root (so `dotnet run` finds it), or next to the built executable.

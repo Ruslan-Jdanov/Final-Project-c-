@@ -77,7 +77,7 @@ public class Menu
         Console.WriteLine("  search name <text>            - Search by name (partial, case-insensitive)");
         Console.WriteLine("  search id <ID>                - Search by exact ID");
         Console.WriteLine("  search category <category>    - Search by category");
-        Console.WriteLine("  search price <min> <max>      - Search by price range (e.g. search price 10 200)");
+        Console.WriteLine("  search price <min> <max>      - Search by price range (e.g. search price 50 200)");
         Console.WriteLine("  show <ID>                     - Show full product details by ID");
         Console.WriteLine("  add                           - Add a new product (interactive)");
         Console.WriteLine("  save                          - Save current products to inventory.txt");

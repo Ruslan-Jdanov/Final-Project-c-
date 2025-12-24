@@ -1,4 +1,4 @@
-# Формат: ID|Name|Category|Price|Quantity|Description
+# Format: ID|Name|Category|Price|Quantity|Description
 CE-001|Gaming Laptop X15|Laptop|1499.99|10|High-performance gaming laptop with RTX.
 CE-002|Office Laptop A14|Laptop|599.00|25|Lightweight laptop for office tasks.
 CE-003|Mechanical Keyboard MK-1|Accessory|79.50|100|RGB mechanical keyboard.

@@ -8,4 +8,3 @@ CE-007|500GB SSD NVMe|Storage|69.99|80|Fast NVMe SSD.
 CE-008|Power Supply 650W|PSU|89.99|40|80+ Bronze certified.
 CE-009|Graphics Card GTX-1660|GPU|199.99|15|Reasonable performance for 1080p.
 CE-010|USB-C Hub 7-in-1|Accessory|39.50|60|Hub with HDMI, USB-A, Ethernet.
-007|earphones|accessory|40.99|2|zxcxzcxz

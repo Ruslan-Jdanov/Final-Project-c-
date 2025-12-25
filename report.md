@@ -9,12 +9,12 @@ It's true :(
 | 4 | Search for Solutions | 2025-12-24 | 2025-12-25 | Chosen layered architecture: Entity/Repository/Service/UI |
 | 5 | Software Development | 2025-12-24 | 2025-12-25 | Implemented MVP: console app reading inventory.txt |
 | 6 | Development Completion | 2025-12-24 | 2025-12-25 | Added add/save commands; supported comma decimal separator |
-| 7 | Presentation | 2025-12-25 | 2025-12-25 | Demo and Q&A (planned) |
+| 7 | Presentation | 2025-12-25 | 2025-12-25 | Prezentation and Demo are ready |
 
 Status:
 - MVP (search, list, file read): 100%
 - Add/save (CRUD partial): implemented
-- Tests & presentation: partial / to complete
+- Tests & presentation: complete
 
 Demo steps:
 1. dotnet run
